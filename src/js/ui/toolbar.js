@@ -51,6 +51,7 @@ papaya.ui.Toolbar.MENU_DATA = {
     ]
 };
 
+//TODO: eliminate layer slices etc from here
 papaya.ui.Toolbar.OVERLAY_IMAGE_MENU_DATA = {
     "items": [
         {"label": "Image Info", "action": "ImageInfo"},
@@ -245,7 +246,6 @@ papaya.ui.Toolbar.prototype.buildMenu = function (menuData, topLevelButtonId, da
             this.buildMenuItems(menu, items, topLevelButtonId, dataSource, modifier);
         }
     }
-
     return menu;
 };
 

@@ -19,6 +19,7 @@ papaya.Container = papaya.Container || function (containerHtml) {
     this.containerHtml = containerHtml;
     this.containerIndex = null;
     this.toolbarHtml = null;
+    this.overlayHtml = null;
     this.viewerHtml = null;
     this.displayHtml = null;
     this.titlebarHtml = null;
@@ -62,11 +63,13 @@ papaya.Container.prototype.getViewerDimensions = function () {
         if (height > maxHeight) {
             height = maxHeight;
             width = roundFast(height * ratio);
+  
         }
     }
 
     return [width, height];
 };
+
 
 
 
@@ -96,10 +99,12 @@ papaya.Container.prototype.resizeViewerComponents = function (resize) {
     this.toolbarHtml.css({paddingBottom: PAPAYA_SPACING + "px"});
 
     this.viewerHtml.css({width: dims[0] + "px"});
+ 
     this.viewerHtml.css({height: dims[1] + "px"});
     this.viewerHtml.css({paddingLeft: padding + "px"});
 
     if (resize) {
+   
         this.viewer.resizeViewer(dims);
     }
 
@@ -136,10 +141,12 @@ papaya.Container.prototype.resizeViewerComponents = function (resize) {
 
 
 papaya.Container.prototype.updateViewerSize = function () {
+
     this.toolbar.closeAllMenus();
     this.viewer.resizeViewer(this.getViewerDimensions());
     this.viewer.updateOffsetRect();
 };
+
 
 
 
@@ -194,9 +201,14 @@ papaya.Container.prototype.buildToolbar = function () {
     this.toolbar.updateImageButtons();
 };
 
-
+papaya.Container.prototype.buildOverlay = function () {
+    this.overlayHtml = this.containerHtml.find("." + PAPAYA_OVERLAY_CSS);
+    this.overlay = new papaya.ui.Overlay(this);
+    this.overlay.buildOverlay();
+};
 
 papaya.Container.prototype.setUpDnD = function () {
+  
     var container = this;
 
     this.containerHtml[0].ondragover = function () {
@@ -438,7 +450,7 @@ function fillContainerHTML(containerHTML, isDefault, params) {
         toolbarHTML = containerHTML.find("#" + PAPAYA_DEFAULT_TOOLBAR_ID);
         viewerHTML = containerHTML.find("#" + PAPAYA_DEFAULT_VIEWER_ID);
         displayHTML = containerHTML.find("#" + PAPAYA_DEFAULT_DISPLAY_ID);
-
+        
         if (toolbarHTML) {
             toolbarHTML.addClass(PAPAYA_TOOLBAR_CSS);
         } else {
@@ -467,6 +479,7 @@ function fillContainerHTML(containerHTML, isDefault, params) {
 
         containerHTML.append("<div id='" + (PAPAYA_DEFAULT_VIEWER_ID + papayaContainers.length) + "' class='" + PAPAYA_VIEWER_CSS + "'></div>");
         containerHTML.append("<div id='" + (PAPAYA_DEFAULT_DISPLAY_ID + papayaContainers.length) + "' class='" + PAPAYA_DISPLAY_CSS + "'></div>");
+        containerHTML.append("<div id='" + (PAPAYA_DEFAULT_OVERLAY_ID + papayaContainers.length) + "' class='" + PAPAYA_OVERLAY_CSS + "'></div>");
 
         if (params && (params.orthogonal !== undefined) && !params.orthogonal) {
             if (isInputRangeSupported()) {
@@ -474,7 +487,6 @@ function fillContainerHTML(containerHTML, isDefault, params) {
             }
         }
     }
-
     return viewerHTML;
 }
 
@@ -485,7 +497,7 @@ function buildContainer(containerHTML, params) {
 
     message = checkForBrowserCompatibility();
     viewerHtml = containerHTML.find("." + PAPAYA_VIEWER_CSS);
-
+    
     if (message !== null) {
         removeCheckForJSClasses(containerHTML, viewerHtml);
         containerHTML.addClass(PAPAYA_UTILS_UNSUPPORTED_CSS);
@@ -503,7 +515,7 @@ function buildContainer(containerHTML, params) {
 
         container.nestedViewer = (containerHTML.parent()[0].tagName.toUpperCase() !== 'BODY');
         container.kioskMode = (container.params.kioskMode === true);
-
+        
         if (container.params.fullScreenPadding !== undefined) {  // default is true
             container.fullScreenPadding = container.params.fullScreenPadding;
         }
@@ -515,6 +527,7 @@ function buildContainer(containerHTML, params) {
         container.buildViewer(container.params);
         container.buildDisplay();
         container.buildToolbar();
+        container.buildOverlay();
 
         if (!container.orthogonal) {
             container.buildSliderControl();
@@ -539,6 +552,7 @@ function buildContainer(containerHTML, params) {
             containerHTML.parent().width("100%");
         }
 
+        console.log(container)
         papayaContainers.push(container);
     }
 }

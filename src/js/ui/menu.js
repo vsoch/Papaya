@@ -146,8 +146,6 @@ papaya.ui.Menu.prototype.addMenuItem = function (menuitem) {
     if (menuitem instanceof papaya.ui.MenuItemRange) {
         this.rangeItem = menuitem;
     }
-
-    this.items.push(menuitem);
 };
 
 
