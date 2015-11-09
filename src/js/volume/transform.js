@@ -393,10 +393,10 @@ papaya.volume.Transform.prototype.getVoxelAtCoordinate = function (xLoc, yLoc, z
     zTrans = ((xLoc * this.worldMat[2][0]) + (yLoc * this.worldMat[2][1]) + (zLoc * this.worldMat[2][2]) +
         (this.worldMat[2][3]));
 
-    if ((xTrans < 0) || (xTrans >= this.imageDimensions.xDim) || (yTrans < 0) ||
-        (yTrans >= this.imageDimensions.yDim) || (zTrans < 0) || (zTrans >= this.imageDimensions.zDim)) {
-        return 0;
-    }
+    //if ((xTrans < 0) || (xTrans >= this.imageDimensions.xDim) || (yTrans < 0) ||
+    //    (yTrans >= this.imageDimensions.yDim) || (zTrans < 0) || (zTrans >= this.imageDimensions.zDim)) {
+    //    return 0;
+    //}
 
     return this.voxelValue.getVoxelAtIndex(xTrans, yTrans, zTrans, timepoint, useNN);
 };

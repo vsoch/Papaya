@@ -35,6 +35,7 @@ papaya.volume.VoxelValue = papaya.volume.VoxelValue || function (imageData, imag
     this.usesGlobalDataScale = imageRange.usesGlobalDataScale;
     this.interpFirstPass = [[0, 0], [0, 0]];
     this.interpSecondPass = [0, 0];
+    this.offsetMax = this.imageData.data.length - 1; 
 };
 
 
@@ -57,6 +58,10 @@ papaya.volume.VoxelValue.prototype.getVoxelAtIndex = function (ctrX, ctrY, ctrZ,
 papaya.volume.VoxelValue.prototype.getVoxelAtOffset = function (volOffset, timepoint) {
     var dataScaleIndex,
         offset = volOffset + (this.volSize * timepoint);
+
+    if ((offset > this.offsetMax) || (offset < 0)) {
+        return 0;
+    }
 
     if (this.usesGlobalDataScale) {
         return (this.checkSwap(this.imageData.data[offset]) * this.globalDataScaleSlope) +
